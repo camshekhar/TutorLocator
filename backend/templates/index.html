@@ -1,0 +1,66 @@
+{% extends 'base.html' %} {% block title %}CRM: Faculties{% endblock title %} {%
+load static %} {% block body %}
+
+<div class="container">
+  <h1 class="h1 text-center mt-4"><a href="/">Welcome to CRM!</a></h1>
+  <hr />
+  <h2 class="h1 text-center text-decoration-underline">Faculties Details:</h2>
+  <h4 class="h4">Filter Faculties:</h4>
+
+  <div class="mb-4 text-center">
+    <form class="d-flex gap-3 mb-2 justify-content-around" method="get" action="/filterFaculty">
+      {% csrf_token %}
+      <select class="form-select" name="city" style="flex:2 !important;">
+        <option selected>City</option>
+        {% for city in cities %}
+        <option value="{{city}}">{{city}}</option>
+        {% endfor %}
+      </select>
+      <select class="form-select" name="course" style="flex:2 !important;">
+        <option selected>Courses</option>
+        {% for course in courses %}
+        <option value="{{course}}">{{course}}</option>
+        {% endfor %}
+      </select>
+      <button type="submit" class="btn btn-success" style="flex:1 !important;">Apply Filters</button>
+    </form>
+    {% if filter_city or filter_course %}
+    <div class="d-flex gap-3">
+      <span class="bg-warning p-2 rounded">{{filter_city}}</span>
+      <span class="bg-warning p-2 rounded">{{filter_course}}</span>
+    </div>
+    {% endif %}
+  </div>
+
+  {% if not faculties %}
+  <p class="col-lg-12 text-center" style="font-size: 1.8rem; color: orangered;">No Faculties found 😟 for current selection.</p>
+  {% endif %}
+  {% for faculty in faculties %}
+  <div class="card mb-3" style="max-width: 700px">
+    <div class="row g-0">
+      <div class="col-md-4 border-end p-2">
+        <img
+          src="{{faculty.photo}}"
+          class="img-fluid border rounded rounded-circle"
+          alt="..."
+        />
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title">Name: <strong>{{faculty.name}}</strong></h5>
+          <p class="card-text"><strong>Email:</strong> {{faculty.email}}</p>
+          <p class="card-text"><strong>Mobile:</strong> {{faculty.mobile}}</p>
+          <p class="card-text"><strong>DOB:</strong> {{faculty.dob}}</p>
+          <p class="card-text"><strong>Courses:</strong> {{faculty.courses}}</p>
+          <p class="card-text">
+            <strong>Address:</strong> {{faculty.locality}}, {{faculty.city}},
+            {{faculty.state}} - {{faculty.pincode}}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock body %}
